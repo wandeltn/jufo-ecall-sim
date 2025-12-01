@@ -5,6 +5,12 @@ use leptos_router::{
     StaticSegment, WildcardSegment,
 };
 
+pub mod components;
+pub mod pages;
+pub mod server;
+
+use components::tile::Event;
+
 #[component]
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
@@ -39,7 +45,12 @@ fn HomePage() -> impl IntoView {
 
     view! {
         <h1>"Welcome to Leptos!"</h1>
-        <button on:click=on_click>"Click Me: " {count}</button>
+        <button
+            class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
+            on:click=on_click>
+            "Click This: " {count}
+        </button>
+        <Event number=42/>
     }
 }
 
@@ -48,7 +59,7 @@ fn HomePage() -> impl IntoView {
 fn NotFound() -> impl IntoView {
     // set an HTTP status code 404
     // this is feature gated because it can only be done during
-    // initial server-side rendering
+    // initial server-sid+e rendering
     // if you navigate to the 404 page subsequently, the status
     // code will not be set because there is not a new HTTP request
     // to the server
