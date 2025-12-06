@@ -7,8 +7,6 @@ use leptos_router::{
 
 pub mod components;
 pub mod pages;
-#[cfg(not(target_arch = "wasm32"))]
-pub mod server;
 
 use components::tile::Event;
 
