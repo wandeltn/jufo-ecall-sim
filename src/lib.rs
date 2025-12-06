@@ -1,4 +1,6 @@
 pub mod app;
+#[cfg(not(target_arch = "wasm32"))]
+pub mod schema;
 
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]
