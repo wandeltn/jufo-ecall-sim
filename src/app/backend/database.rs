@@ -21,11 +21,11 @@ cfg_if::cfg_if! {
         pub fn get_num_users(pool: &PgPool) -> i64 {
             use diesel::prelude::*;
             let mut conn = get_connection(pool);
-            attendees::table
-                .count()
-                .get_result(&mut conn)
-                .expect("Error counting users")
+            // attendees::table
+            //     .count()
+            //     .get_result(&mut conn)
+            //     .expect("Error counting users");
+            10
         }
     }
 }
-

@@ -5,9 +5,11 @@ use leptos_router::{
     StaticSegment, WildcardSegment,
 };
 
+pub mod backend;
 pub mod components;
 pub mod pages;
 
+use crate::app::backend::api::*;
 use components::tile::Event;
 
 #[component]
@@ -41,6 +43,9 @@ fn HomePage() -> impl IntoView {
     // Creates a reactive value to update the button
     let count = RwSignal::new(0);
     let on_click = move |_| *count.write() += 1;
+    let (user_count, _set_user_count) = signal(0);
+
+    let async_user_count = Resource::new(move || user_count.get(), |_| get_num_users_api());
 
     view! {
         <h1>"Welcome to Leptos!"</h1>
@@ -49,6 +54,7 @@ fn HomePage() -> impl IntoView {
             on:click=on_click>
             "Click This: " {count}
         </button>
+        <p>"Number of users: " {async_user_count}</p>
         <Event number=42/>
     }
 }
