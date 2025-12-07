@@ -9,6 +9,11 @@ diesel::table! {
         email -> Varchar,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
+        #[max_length = 255]
+        password_hash -> Nullable<Varchar>,
+        #[max_length = 255]
+        salt -> Nullable<Varchar>,
+        is_admin -> Nullable<Bool>,
     }
 }
 
