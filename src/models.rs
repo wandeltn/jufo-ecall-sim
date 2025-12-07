@@ -24,7 +24,7 @@ pub struct Attendee {
 
 #[derive(Queryable, Debug, Selectable, Serialize, Deserialize)]
 #[diesel(table_name = events)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
+// #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Event {
     pub id: i32,
     pub name: String,

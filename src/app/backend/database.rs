@@ -47,5 +47,19 @@ cfg_if::cfg_if! {
                 .optional()
                 .expect("Error loading event")
         }
+
+        pub fn add_event(pool: &PgPool, name: String, event_date: chrono::NaiveDateTime, location: Option<String>, image_base64: Option<String>) {
+            use diesel::prelude::*;
+            let conn = &mut get_connection(pool);
+            diesel::insert_into(events::table)
+                .values((
+                    events::name.eq(name),
+                    events::event_date.eq(event_date),
+                    events::location.eq(location),
+                    events::image_base64.eq(image_base64),
+                ))
+                .execute(conn)
+                .expect("Error inserting event");
+        }
     }
 }

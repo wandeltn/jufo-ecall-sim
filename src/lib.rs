@@ -1,4 +1,6 @@
 pub mod app;
+pub mod models;
+pub mod schema;
 
 #[cfg(feature = "hydrate")]
 #[wasm_bindgen::prelude::wasm_bindgen]
@@ -10,7 +12,7 @@ pub fn hydrate() {
 
 cfg_if::cfg_if! {
     if #[cfg(not(target_arch = "wasm32"))] {
-        pub mod models;
-        pub mod schema;
+        // pub mod models;
+        // pub mod schema;
     }
 }
