@@ -14,6 +14,7 @@ diesel::table! {
         #[max_length = 255]
         salt -> Nullable<Varchar>,
         is_admin -> Nullable<Bool>,
+        image_base64 -> Nullable<Text>,
     }
 }
 
@@ -27,6 +28,7 @@ diesel::table! {
         location -> Nullable<Varchar>,
         created_at -> Nullable<Timestamp>,
         updated_at -> Nullable<Timestamp>,
+        image_base64 -> Nullable<Text>,
     }
 }
 

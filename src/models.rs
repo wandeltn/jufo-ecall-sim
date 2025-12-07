@@ -7,6 +7,7 @@ use crate::schema::{attendees, events, tickets, venues};
 use bigdecimal::BigDecimal;
 use chrono::NaiveDateTime;
 use diesel::{prelude::Queryable, Selectable};
+use serde::{Deserialize, Serialize};
 
 #[derive(Queryable, Debug)]
 pub struct Attendee {
@@ -18,9 +19,10 @@ pub struct Attendee {
     pub password_hash: Option<String>,
     pub salt: Option<String>,
     pub is_admin: Option<bool>,
+    pub image_base64: Option<String>,
 }
 
-#[derive(Queryable, Debug, Selectable)]
+#[derive(Queryable, Debug, Selectable, Serialize, Deserialize)]
 #[diesel(table_name = events)]
 #[diesel(check_for_backend(diesel::pg::Pg))]
 pub struct Event {
@@ -30,6 +32,7 @@ pub struct Event {
     pub location: Option<String>,
     pub created_at: Option<NaiveDateTime>,
     pub updated_at: Option<NaiveDateTime>,
+    pub image_base64: Option<String>,
 }
 
 #[derive(Queryable, Debug)]

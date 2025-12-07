@@ -1,0 +1,47 @@
+{
+    "rust-analyzer.cargo.features": [
+        "ssr"
+    ],
+    // "rust-analyzer.checkOnSave.features": [
+    //     "ssr"
+    // ],
+    "rust-analyzer.cargo.targetDir": "target",
+    "rust-analyzer.server.extraEnv": {
+        "RUSTUP_TOOLCHAIN": "nightly"
+    },
+    "rust-analyzer.rustfmt.overrideCommand": [
+        "leptosfmt",
+        "--stdin",
+        "--rustfmt"
+    ],
+    "editor.formatOnSave": true,
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    },
+    "files.associations": {
+        "*.rs": "rust"
+    },
+    "rust-analyzer.procMacro.enable": true,
+    "rust-analyzer.procMacro.attributes": [
+        "component",
+        "server",
+        "derive"
+    ],
+    "rust-analyzer.cargo.loadOutDirsFromCheck": true,
+    // "rust-analyzer.cargo.features": "all", // Enable all features
+    // "emmet.includeLanguages": {
+    //     "rust": "html",
+    //     "*.rs": "html"
+    // },
+    // "tailwindCSS.includeLanguages": {
+    //     "rust": "html",
+    //     "*.rs": "html"
+    // },
+    "editor.quickSuggestions": {
+        "other": "on",
+        "comments": "on",
+        "strings": true
+    },
+    "css.validate": false,
+    "rust-analyzer.checkOnSave": true,
+}

@@ -9,8 +9,8 @@ pub mod backend;
 pub mod components;
 pub mod pages;
 
-use crate::app::backend::api::*;
-use components::tile::Event;
+use crate::app::backend::api::get_num_users_api;
+use components::tile::EventView;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -20,17 +20,17 @@ pub fn App() -> impl IntoView {
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
-        <Stylesheet id="leptos" href="/pkg/event-tickets-rust.css"/>
+        <Stylesheet id="leptos" href="/pkg/event-tickets-rust.css" />
 
         // sets the document title
-        <Title text="Welcome to Leptos"/>
+        <Title text="Welcome to Leptos" />
 
         // content for this welcome page
         <Router>
             <main>
                 <Routes fallback=move || "Not found.">
-                    <Route path=StaticSegment("") view=HomePage/>
-                    <Route path=WildcardSegment("any") view=NotFound/>
+                    <Route path=StaticSegment("") view=HomePage />
+                    <Route path=WildcardSegment("any") view=NotFound />
                 </Routes>
             </main>
         </Router>
@@ -49,13 +49,12 @@ fn HomePage() -> impl IntoView {
 
     view! {
         <h1>"Welcome to Leptos!"</h1>
-        <button
-            class="bg-blue-500 text-white font-bold py-2 px-4 rounded"
-            on:click=on_click>
-            "Click This: " {count}
+        <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded" on:click=on_click>
+            "Click This: "
+            {count}
         </button>
         <p>"Number of users: " {async_user_count}</p>
-        <Event number=42/>
+        <EventView number=42 />
     }
 }
 
@@ -64,7 +63,7 @@ fn HomePage() -> impl IntoView {
 fn NotFound() -> impl IntoView {
     // set an HTTP status code 404
     // this is feature gated because it can only be done during
-    // initial server-sid+e rendering
+    // initial server-side rendering
     // if you navigate to the 404 page subsequently, the status
     // code will not be set because there is not a new HTTP request
     // to the server
@@ -76,7 +75,5 @@ fn NotFound() -> impl IntoView {
         resp.set_status(actix_web::http::StatusCode::NOT_FOUND);
     }
 
-    view! {
-        <h1>"Not Found"</h1>
-    }
+    view! { <h1>"Not Found"</h1> }
 }
