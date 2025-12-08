@@ -10,6 +10,7 @@ pub mod components;
 pub mod pages;
 
 use crate::app::backend::api::get_num_users_api;
+use crate::app::pages::home_page::HomePage;
 use components::tile::EventView;
 
 #[component]
@@ -29,7 +30,8 @@ pub fn App() -> impl IntoView {
         <Router>
             <main>
                 <Routes fallback=move || "Not found.">
-                    <Route path=StaticSegment("") view=HomePage />
+                    <Route path=StaticSegment("") view=HomePageTest />
+                    <Route path=StaticSegment("home") view=HomePage />
                     <Route path=WildcardSegment("any") view=NotFound />
                 </Routes>
             </main>
@@ -39,7 +41,7 @@ pub fn App() -> impl IntoView {
 
 /// Renders the home page of your application.
 #[component]
-fn HomePage() -> impl IntoView {
+fn HomePageTest() -> impl IntoView {
     // Creates a reactive value to update the button
     let count = RwSignal::new(0);
     let on_click = move |_| *count.write() += 1;
