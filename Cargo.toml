@@ -22,6 +22,7 @@ serde = { version = "1.0.228", features = ["derive"] }
 chrono = { version = "0.4.42", features = ["serde"] }
 bigdecimal = "0.4.9"
 diesel = { version = "2.2.0", features = ["chrono"] }
+phosphor-leptos = "0.8.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 # Database dependencies
@@ -33,7 +34,9 @@ dotenvy = "0.15"
 [features]
 default = ["ssr"]
 csr = ["leptos/csr"]
-hydrate = ["leptos/hydrate"]
+hydrate = [
+  "leptos/hydrate", 
+  ]
 ssr = [
   "dep:actix-files",
   "dep:actix-web",

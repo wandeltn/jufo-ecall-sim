@@ -2,16 +2,17 @@ use leptos::prelude::*;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
     components::{Route, Router, Routes},
-    StaticSegment, WildcardSegment,
+    path, StaticSegment, WildcardSegment,
 };
 
 pub mod backend;
 pub mod components;
 pub mod pages;
 
-use crate::app::backend::api::get_num_users_api;
-use crate::app::pages::home_page::HomePage;
-use components::tile::EventView;
+use crate::app::pages::{
+    about_page::AboutPage, create_event_page::CreateEventPage, find_event_page::FindEventPage,
+    home_page::HomePage,
+};
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -27,36 +28,18 @@ pub fn App() -> impl IntoView {
         <Title text="Welcome to Leptos" />
 
         // content for this welcome page
+
         <Router>
             <main>
                 <Routes fallback=move || "Not found.">
-                    <Route path=StaticSegment("") view=HomePageTest />
-                    <Route path=StaticSegment("home") view=HomePage />
+                    <Route path=path!("") view=HomePage />
+                    <Route path=StaticSegment("find") view=FindEventPage />
+                    <Route path=path!("create") view=CreateEventPage />
+                    <Route path=path!("about") view=AboutPage />
                     <Route path=WildcardSegment("any") view=NotFound />
                 </Routes>
             </main>
         </Router>
-    }
-}
-
-/// Renders the home page of your application.
-#[component]
-fn HomePageTest() -> impl IntoView {
-    // Creates a reactive value to update the button
-    let count = RwSignal::new(0);
-    let on_click = move |_| *count.write() += 1;
-    let (user_count, _set_user_count) = signal(0);
-
-    let async_user_count = Resource::new(move || user_count.get(), |_| get_num_users_api());
-
-    view! {
-        <h1>"Welcome to Leptos!"</h1>
-        <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded" on:click=on_click>
-            "Click This: "
-            {count}
-        </button>
-        <p>"Number of users: " {async_user_count}</p>
-        <EventView number=42 />
     }
 }
 
