@@ -1,3 +1,5 @@
+use leptos::logging;
+
 cfg_if::cfg_if! {
     if #[cfg(feature = "ssr")] {
         use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
@@ -48,8 +50,9 @@ cfg_if::cfg_if! {
                 .expect("Error loading event")
         }
 
-        pub fn add_event(pool: &PgPool, name: String, event_date: chrono::NaiveDateTime, location: Option<String>, image_base64: Option<String>) {
+        pub fn add_event(pool: &PgPool, name: String, event_date: chrono::NaiveDateTime, location: Option<String>, image_base64: Option<String>) -> Result<(), diesel::result::Error> {
             use diesel::prelude::*;
+            logging::debug_log!("Adding event: {}, {}, {:?}, {:?}", name, event_date, location, image_base64);
             let conn = &mut get_connection(pool);
             diesel::insert_into(events::table)
                 .values((
@@ -58,8 +61,8 @@ cfg_if::cfg_if! {
                     events::location.eq(location),
                     events::image_base64.eq(image_base64),
                 ))
-                .execute(conn)
-                .expect("Error inserting event");
+                .execute(conn)?;
+            Ok(())
         }
     }
 }
