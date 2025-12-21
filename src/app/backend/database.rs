@@ -1,9 +1,8 @@
-use leptos::logging;
-
 cfg_if::cfg_if! {
     if #[cfg(feature = "ssr")] {
         use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
         use diesel::{PgConnection};
+        use leptos::logging;
         use crate::schema::{attendees, events};
         use crate::models::Event;
         pub type PgPool = Pool<ConnectionManager<PgConnection>>;
