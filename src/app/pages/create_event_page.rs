@@ -48,7 +48,7 @@ pub fn CreateEventPage() -> impl IntoView {
                         />
                         <input
                             class="flex flex-1 bg-gray-200 p-2 rounded"
-                            type="date"
+                            type="datetime-local"
                             bind:value=event_date
                         />
                         <input
