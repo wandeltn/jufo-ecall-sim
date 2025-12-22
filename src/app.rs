@@ -4,6 +4,7 @@ use leptos_router::{
     components::{Route, Router, Routes},
     path, StaticSegment, WildcardSegment,
 };
+use thaw::ConfigProvider;
 
 pub mod backend;
 pub mod components;
@@ -29,17 +30,19 @@ pub fn App() -> impl IntoView {
 
         // content for this welcome page
 
-        <Router>
-            <main>
-                <Routes fallback=move || "Not found.">
-                    <Route path=path!("") view=HomePage />
-                    <Route path=StaticSegment("find") view=FindEventPage />
-                    <Route path=path!("create") view=CreateEventPage />
-                    <Route path=path!("about") view=AboutPage />
-                    <Route path=WildcardSegment("any") view=NotFound />
-                </Routes>
-            </main>
-        </Router>
+        <ConfigProvider>
+            <Router>
+                <main>
+                    <Routes fallback=move || "Not found.">
+                        <Route path=path!("") view=HomePage />
+                        <Route path=StaticSegment("find") view=FindEventPage />
+                        <Route path=path!("create") view=CreateEventPage />
+                        <Route path=path!("about") view=AboutPage />
+                        <Route path=WildcardSegment("any") view=NotFound />
+                    </Routes>
+                </main>
+            </Router>
+        </ConfigProvider>
     }
 }
 

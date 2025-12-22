@@ -5,7 +5,7 @@ use leptos::prelude::*;
 use leptos::reactive::spawn_local;
 use leptos::{view, IntoView};
 use phosphor_leptos::{Icon, IconWeight, TICKET};
-// use thaw::DatePicker;
+use thaw::*;
 
 #[component]
 pub fn CreateEventPage() -> impl IntoView {
@@ -18,7 +18,6 @@ pub fn CreateEventPage() -> impl IntoView {
     let location_name = RwSignal::new("".to_string());
     let ticket_price = RwSignal::new("".to_string());
     let ticket_quantity = RwSignal::new("".to_string());
-
 
     // add_event_api(name, event_date, location, image_base64);
 
@@ -47,6 +46,9 @@ pub fn CreateEventPage() -> impl IntoView {
                 <div class="flex items-center flex-col flex-wrap gap-4 mb-4 sm:mb-8 lg:mb-12">
                     <div class="flex flex-col gap-4 bg-white p-6 rounded shadow-md w-full max-w-md">
                         <h2 class="text-2xl font-bold mb-4">"Event Details"</h2>
+
+                        <Input value=event_name placeholder="Event Name" />
+
                         <input
                             class="flex flex-2 bg-gray-200 p-2 rounded"
                             type="text"
