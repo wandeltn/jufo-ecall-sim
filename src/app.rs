@@ -5,6 +5,8 @@ use leptos_router::{
     path, StaticSegment, WildcardSegment,
 };
 use thaw::ConfigProvider;
+use crate::app::components::navbar::NavbarComponent;
+use leptos_captcha::Captcha;
 
 pub mod backend;
 pub mod components;
@@ -20,6 +22,9 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
+    let theme = RwSignal::new(thaw::Theme::light());
+    let is_pending = RwSignal::new(Option::None);
+
     view! {
         // injects a stylesheet into the document <head>
         // id=leptos means cargo-leptos will hot-reload this stylesheet
@@ -30,9 +35,10 @@ pub fn App() -> impl IntoView {
 
         // content for this welcome page
 
-        <ConfigProvider>
+        <ConfigProvider theme>
             <Router>
                 <main>
+                    <NavbarComponent />
                     <Routes fallback=move || "Not found.">
                         <Route path=path!("") view=HomePage />
                         <Route path=StaticSegment("find") view=FindEventPage />
@@ -40,6 +46,8 @@ pub fn App() -> impl IntoView {
                         <Route path=path!("about") view=AboutPage />
                         <Route path=WildcardSegment("any") view=NotFound />
                     </Routes>
+
+                    <Captcha is_pending />
                 </main>
             </Router>
         </ConfigProvider>
@@ -64,4 +72,22 @@ fn NotFound() -> impl IntoView {
     }
 
     view! { <h1>"Not Found"</h1> }
+}
+
+#[server]
+pub async fn get_pow() -> Result<String, ServerFnError> {
+    use leptos_captcha::spow::pow::Pow;
+
+    // I highly suggest, that you create a global static variable in your app
+    // as an indicator if you are in DEV / DEBUG mode, or something like that.
+    // You could pull it from the context, or where ever it makes sense for you.
+    // In debug mode, the speed of the verification in the UI is a lot slower, and
+    // you should just use the lowest difficulty of `10` during development.
+    const DEV_MODE: bool = true;
+
+    if DEV_MODE {
+        Ok(Pow::with_difficulty(10, 10)?.to_string())
+    } else {
+        Ok(Pow::new(10)?.to_string())
+    }
 }

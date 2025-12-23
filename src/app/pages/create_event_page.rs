@@ -1,8 +1,6 @@
 use crate::app::backend::api::add_event_api;
-use crate::app::components::navbar::NavbarComponent;
-use leptos::leptos_dom::logging::console_debug_log;
+use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
-use leptos::reactive::spawn_local;
 use leptos::{view, IntoView};
 use phosphor_leptos::{Icon, IconWeight, TICKET};
 use thaw::*;
@@ -23,20 +21,19 @@ pub fn CreateEventPage() -> impl IntoView {
 
     async fn on_submit(event_name: String, event_date: String, location: String) {
 
-        console_debug_log(&format!(
+        console_log(&format!(
             "Creating Event with details: Name: {}, Date: {}, Location: {}",
             event_name, event_date, location
         ));
 
         match add_event_api(event_name, event_date, Some(location), Some("".to_string())).await {
-            Ok(_) => console_debug_log("Event created successfully."),
-            Err(e) => console_debug_log(&format!("Failed to create event: {:?}", e)),
+            Ok(_) => console_log("Event created successfully."),
+            Err(e) => console_log(&format!("Failed to create event: {:?}", e)),
         }
     }
 
     view! {
         <div class="min-h-screen bg-background">
-            <NavbarComponent />
             <h1 class="text-4xl font-heading font-bold mb-2">"Create Event"</h1>
             <p class="text-muted-foreground mb-8">
                 "Fill in the details below to create a new event."
@@ -120,15 +117,17 @@ pub fn CreateEventPage() -> impl IntoView {
                             />
                         </div>
                     </div>
-                    <button
-                        type="button"
-                        on:click=move |_| spawn_local(
-                            on_submit(event_name.get(), event_date.get(), location.get()),
-                        )
-                        class="bg-blue-500 text-white p-2 rounded"
-                    >
-                        "Create Event"
-                    </button>
+
+                    <Button appearance=ButtonAppearance::Primary>"Click Me"</Button>
+                // <button
+                // type="button"
+                // on:click=move |_| spawn_local(
+                // on_submit(event_name.get(), event_date.get(), location.get()),
+                // )
+                // class="bg-blue-500 text-white p-2 rounded"
+                // >
+                // "Create Event"
+                // </button>
                 </div>
             </div>
         </div>
