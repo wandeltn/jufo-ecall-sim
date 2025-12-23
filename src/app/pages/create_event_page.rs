@@ -1,14 +1,22 @@
 use crate::app::backend::api::add_event_api;
+use chrono::Local;
 use leptos::leptos_dom::logging::console_log;
 use leptos::prelude::*;
 use leptos::{view, IntoView};
 use phosphor_leptos::{Icon, IconWeight, TICKET};
-use thaw::*;
+use thaw::{
+    DatePicker, 
+    Input,
+    TimePicker,
+    Button,
+    ButtonAppearance,
+    Select,
+};
 
 #[component]
 pub fn CreateEventPage() -> impl IntoView {
     let event_name = RwSignal::new("".to_string());
-    let event_date = RwSignal::new("".to_string());
+    let event_date = RwSignal::new(Local::now().date_naive());
     let location = RwSignal::new("".to_string());
     let description = RwSignal::new("".to_string());
     let category = RwSignal::new("".to_string());
@@ -46,75 +54,32 @@ pub fn CreateEventPage() -> impl IntoView {
 
                         <Input value=event_name placeholder="Event Name" />
 
-                        <input
-                            class="flex flex-2 bg-gray-200 p-2 rounded"
-                            type="text"
-                            bind:value=event_name
-                            placeholder="Event Name"
-                        />
-
-                        <div class="flex gap-2">
-                            <div class="size-4 flex-none">
+                        <div>
+                            <div>
                                 <Icon icon=TICKET size="24px" weight=IconWeight::Regular />
                             </div>
-                            <p class="grow">"Date & Time:"</p>
-                            <input
-                                class="flex-1 bg-gray-200 p-2 rounded"
-                                type="date"
-                                bind:value=event_date
-                            />
+                            <p>"Date & Time:"</p>
+                            <DatePicker value=event_date />
 
-                            <input
-                                class="flex-1 bg-gray-200 p-2 rounded"
-                                type="time"
-                                bind:value=event_time
-                            />
+                        // <TimePicker value=event_time />
                         </div>
 
-                        <input
-                            class="flex flex-2 bg-gray-200 p-2 rounded"
-                            type="text"
-                            bind:value=location
-                            placeholder="Where is the event happening?"
-                        />
+                        <Input value=location placeholder="Where is the event happening?" />
 
-                        <input
-                            class="flex flex-2 bg-gray-200 p-2 rounded"
-                            type="text"
-                            bind:value=location_name
-                            placeholder="Location Name"
-                        />
+                        <Input value=location_name placeholder="Location Name" />
 
-                        <input
-                            class="flex flex-1 bg-gray-200 p-2 rounded"
-                            type="text"
-                            bind:value=description
-                            placeholder="Describe your event in detail..."
-                        />
+                        <Input value=description placeholder="Describe your event in detail..." />
 
-                        <select class="flex flex-1 bg-gray-200 p-2 rounded" bind:value=category>
+                        <Select value=category>
                             <option value="">Select a category</option>
                             <option value="Music">Music</option>
                             <option value="Art">Art</option>
                             <option value="Tech">Tech</option>
-                        </select>
+                        </Select>
 
-                        <div class="gap-4">
-                            <input
-                                class="flex flex-1 bg-gray-200 p-2 rounded"
-                                type="number"
-                                bind:value=ticket_price
-                                placeholder="Ticket Price"
-                                min="0"
-                                step="0.01"
-                            />
-                            <input
-                                class="flex flex-1 bg-gray-200 p-2 rounded"
-                                type="number"
-                                bind:value=ticket_quantity
-                                placeholder="Ticket Quantity"
-                                min="0"
-                            />
+                        <div>
+                            <Input value=ticket_price placeholder="Ticket Price" />
+                            <Input value=ticket_quantity placeholder="Ticket Quantity" />
                         </div>
                     </div>
 

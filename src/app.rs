@@ -83,7 +83,7 @@ pub async fn get_pow() -> Result<String, ServerFnError> {
     // You could pull it from the context, or where ever it makes sense for you.
     // In debug mode, the speed of the verification in the UI is a lot slower, and
     // you should just use the lowest difficulty of `10` during development.
-    const DEV_MODE: bool = true;
+    const DEV_MODE: bool = false;
 
     if DEV_MODE {
         Ok(Pow::with_difficulty(10, 10)?.to_string())
