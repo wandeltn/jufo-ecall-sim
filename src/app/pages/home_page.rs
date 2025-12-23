@@ -1,4 +1,3 @@
-use crate::app::components::navbar::NavbarComponent;
 use leptos::prelude::*;
 use leptos::{view, IntoView};
 
@@ -6,7 +5,6 @@ use leptos::{view, IntoView};
 pub fn HomePage() -> impl IntoView {
     view! {
         <div>
-            <NavbarComponent/>
             <h1>"Home Page"</h1>
         </div>
     }

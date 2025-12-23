@@ -1,8 +1,9 @@
 cfg_if::cfg_if! {
-    if #[cfg(feature = "ssr")] {
+    if #[cfg(not(target_arch = "wasm32"))] {
         use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
         use diesel::{PgConnection};
         use leptos::logging;
+        use leptos::prelude::ServerFnError;
         use crate::schema::{attendees, events};
         use crate::models::Event;
         pub type PgPool = Pool<ConnectionManager<PgConnection>>;
@@ -49,9 +50,9 @@ cfg_if::cfg_if! {
                 .expect("Error loading event")
         }
 
-        pub fn add_event(pool: &PgPool, name: String, event_date: chrono::NaiveDateTime, location: Option<String>, image_base64: Option<String>) -> Result<(), diesel::result::Error> {
+        pub fn add_event(pool: &PgPool, name: String, event_date: chrono::NaiveDateTime, location: Option<String>, image_base64: Option<String>) -> Result<(), ServerFnError> {
             use diesel::prelude::*;
-            logging::debug_log!("Adding event: {}, {}, {:?}, {:?}", name, event_date, location, image_base64);
+            logging::log!("Adding event: {}, {}, {:?}, {:?}", name, event_date, location, image_base64);
             let conn = &mut get_connection(pool);
             diesel::insert_into(events::table)
                 .values((
@@ -61,6 +62,34 @@ cfg_if::cfg_if! {
                     events::image_base64.eq(image_base64),
                 ))
                 .execute(conn)?;
+            Ok(())
+        }
+    } else {
+        // Dummy implementations for wasm32 target
+        pub struct PgPool;
+        pub struct PgPooledConnection;
+
+        pub fn establish_pool() -> PgPool {
+            PgPool
+        }
+
+        pub fn get_connection(_pool: &PgPool) -> PgPooledConnection {
+            PgPooledConnection
+        }
+
+        pub fn get_num_users(_pool: &PgPool) -> i64 {
+            0
+        }
+
+        pub fn get_num_events(_pool: &PgPool) -> i64 {
+            0
+        }
+
+        pub fn get_event_by_id(_pool: &PgPool, _event_id: i32) -> Option<crate::models::Event> {
+            None
+        }
+
+        pub fn add_event(_pool: &PgPool, _name: String, _event_date: chrono::NaiveDateTime, _location: Option<String>, _image_base64: Option<String>) -> Result<(), leptos::prelude::ServerFnError> {
             Ok(())
         }
     }

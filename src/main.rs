@@ -9,6 +9,10 @@ async fn main() -> std::io::Result<()> {
     use leptos::prelude::*;
     use leptos_actix::{generate_route_list, LeptosRoutes};
     use leptos_meta::MetaTags;
+    use thaw::ssr::SSRMountStyleProvider;
+    use leptos_captcha::spow::pow::Pow;
+
+    Pow::init_random().unwrap();
 
     dotenv().ok();
 
@@ -37,23 +41,27 @@ async fn main() -> std::io::Result<()> {
             .leptos_routes(routes, {
                 let leptos_options = leptos_options.clone();
                 move || {
+                    let leptos_options = leptos_options.clone();
+                    
                     view! {
-                        <!DOCTYPE html>
-                        <html lang="en">
-                            <head>
-                                <meta charset="utf-8" />
-                                <meta
-                                    name="viewport"
-                                    content="width=device-width, initial-scale=1"
-                                />
-                                <AutoReload options=leptos_options.clone() />
-                                <HydrationScripts options=leptos_options.clone() />
-                                <MetaTags />
-                            </head>
-                            <body>
-                                <App />
-                            </body>
-                        </html>
+                        <SSRMountStyleProvider>
+                            <!DOCTYPE html>
+                            <html lang="en">
+                                <head>
+                                    <meta charset="utf-8" />
+                                    <meta
+                                        name="viewport"
+                                        content="width=device-width, initial-scale=1"
+                                    />
+                                    <AutoReload options=leptos_options.clone() />
+                                    <HydrationScripts options=leptos_options.clone() />
+                                    <MetaTags />
+                                </head>
+                                <body>
+                                    <App />
+                                </body>
+                            </html>
+                        </SSRMountStyleProvider>
                     }
                 }
             })
