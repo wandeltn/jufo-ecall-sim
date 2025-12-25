@@ -1,12 +1,16 @@
+use crate::app::components::navbar::NavbarComponent;
 use leptos::prelude::*;
+use leptos_captcha::Captcha;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
 use leptos_router::{
     components::{Route, Router, Routes},
     path, StaticSegment, WildcardSegment,
 };
-use thaw::ConfigProvider;
-use crate::app::components::navbar::NavbarComponent;
-use leptos_captcha::Captcha;
+use leptos_use::{
+    use_color_mode_with_options, use_preferred_dark, ColorMode, UseColorModeOptions,
+    UseColorModeReturn,
+};
+use thaw::{ConfigProvider, Theme};
 
 pub mod backend;
 pub mod components;
@@ -22,7 +26,20 @@ pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
-    let theme = RwSignal::new(thaw::Theme::light());
+    let is_dark_preferred = use_preferred_dark();
+
+    let UseColorModeReturn { mode, set_mode, .. } =
+        use_color_mode_with_options(UseColorModeOptions::default().cookie_enabled(true));
+
+    let theme = RwSignal::new(
+        if is_dark_preferred.get() || mode.get() == ColorMode::Dark {
+            set_mode.set(ColorMode::Dark);
+            Theme::dark()
+        } else {
+            set_mode.set(ColorMode::Light);
+            Theme::light()
+        },
+    );
     let is_pending = RwSignal::new(Option::None);
 
     view! {
@@ -38,7 +55,7 @@ pub fn App() -> impl IntoView {
         <ConfigProvider theme>
             <Router>
                 <main>
-                    <NavbarComponent />
+                    <NavbarComponent theme=theme />
                     <Routes fallback=move || "Not found.">
                         <Route path=path!("") view=HomePage />
                         <Route path=StaticSegment("find") view=FindEventPage />

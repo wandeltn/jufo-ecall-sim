@@ -23,7 +23,7 @@ chrono = { version = "=0.4.40", features = ["serde"] }
 bigdecimal = "0.4.9"
 diesel = { version = "2.2.0", features = ["chrono"] }
 phosphor-leptos = "0.7.0"
-leptos-use = "0.15.0"
+leptos-use = { version = "0.15.0", features = ["use_cookie", "use_color_mode"] }
 # leptos_oidc = "0.8.0"
 leptos-captcha = "0.3.0"
 thaw = "0.4.8"
@@ -51,6 +51,8 @@ ssr = [
   "leptos_router/ssr",
   "server_fn/ssr",
   "thaw/ssr",
+  "leptos-use/ssr",
+  "leptos-use/actix",
 ]
 
 # Defines a size-optimized profile for the WASM bundle in release mode

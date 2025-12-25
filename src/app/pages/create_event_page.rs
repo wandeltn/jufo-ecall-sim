@@ -11,6 +11,7 @@ use thaw::{
     Button,
     ButtonAppearance,
     Select,
+    Flex,
 };
 
 #[component]
@@ -20,7 +21,7 @@ pub fn CreateEventPage() -> impl IntoView {
     let location = RwSignal::new("".to_string());
     let description = RwSignal::new("".to_string());
     let category = RwSignal::new("".to_string());
-    let event_time = RwSignal::new("".to_string());
+    let event_time = RwSignal::new(Local::now().time());
     let location_name = RwSignal::new("".to_string());
     let ticket_price = RwSignal::new("".to_string());
     let ticket_quantity = RwSignal::new("".to_string());
@@ -41,7 +42,7 @@ pub fn CreateEventPage() -> impl IntoView {
     }
 
     view! {
-        <div class="min-h-screen bg-background">
+        <Flex vertical=true>
             <h1 class="text-4xl font-heading font-bold mb-2">"Create Event"</h1>
             <p class="text-muted-foreground mb-8">
                 "Fill in the details below to create a new event."
@@ -49,7 +50,7 @@ pub fn CreateEventPage() -> impl IntoView {
             <div class="">
 
                 <div class="flex items-center flex-col flex-wrap gap-4 mb-4 sm:mb-8 lg:mb-12">
-                    <div class="flex flex-col gap-4 bg-white p-6 rounded shadow-md w-full max-w-md">
+                    <div class="flex flex-col gap-4 p-6 rounded shadow-md w-full max-w-md">
                         <h2 class="text-2xl font-bold mb-4">"Event Details"</h2>
 
                         <Input value=event_name placeholder="Event Name" />
@@ -61,7 +62,7 @@ pub fn CreateEventPage() -> impl IntoView {
                             <p>"Date & Time:"</p>
                             <DatePicker value=event_date />
 
-                        // <TimePicker value=event_time />
+                            <TimePicker value=event_time />
                         </div>
 
                         <Input value=location placeholder="Where is the event happening?" />
@@ -95,6 +96,6 @@ pub fn CreateEventPage() -> impl IntoView {
                 // </button>
                 </div>
             </div>
-        </div>
+        </Flex>
     }
 }
