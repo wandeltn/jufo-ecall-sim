@@ -55,6 +55,11 @@ async fn main() -> std::io::Result<()> {
                                     />
                                     <AutoReload options=leptos_options.clone() />
                                     <HydrationScripts options=leptos_options.clone() />
+                                    <link
+                                        rel="stylesheet"
+                                        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+                                    />
+                                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
                                     <MetaTags />
                                 </head>
                                 <body>

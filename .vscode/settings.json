@@ -44,4 +44,7 @@
     },
     "css.validate": false,
     "rust-analyzer.checkOnSave": true,
+    "chat.tools.terminal.autoApprove": {
+        "cargo check": true
+    },
 }
