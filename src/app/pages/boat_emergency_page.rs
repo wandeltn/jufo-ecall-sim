@@ -24,7 +24,7 @@ pub struct BoatEmergencyData {
 pub fn BoatEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
     let navigate = use_navigate();
     let geolocation = use_geolocation();
-    let (presets, set_presets) = signal(get_boat_presets());
+    let (presets, _set_presets) = signal(get_boat_presets());
 
     let use_preset_mode = RwSignal::new(true);
 
@@ -36,6 +36,23 @@ pub fn BoatEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
     let emergency_type = RwSignal::new(String::from("Medical"));
     let description = RwSignal::new(String::new());
     let water_condition = RwSignal::new(String::from("Sinking"));
+
+    // Geolocation status
+    let location_acquired = RwSignal::new(false);
+    let location_error = RwSignal::new(String::new());
+
+    // Initialize geolocation data on component load
+    {
+        let coords = geolocation.coords;
+        Effect::new(move || {
+            if let Some(_coord) = coords.get() {
+                location_acquired.set(true);
+                location_error.set(String::new());
+            } else {
+                location_error.set("🔍 Acquiring GPS signal...".to_string());
+            }
+        });
+    }
 
     let apply_preset = move |preset: BoatEmergencyPreset| {
         captain_name.set(preset.captain_name);
@@ -138,7 +155,7 @@ pub fn BoatEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
                                             .get()
                                             .map(|c| (Some(c.latitude()), Some(c.longitude())))
                                             .unwrap_or((None, None));
-                                        let data = BoatEmergencyData {
+                                        let _data = BoatEmergencyData {
                                             captain_name: captain_name.get(),
                                             phone: phone.get(),
                                             boat_name: boat_name.get(),
@@ -154,7 +171,7 @@ pub fn BoatEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
                                         {
                                             if let Some(window) = web_sys::window() {
                                                 if let Ok(Some(storage)) = window.local_storage() {
-                                                    if let Ok(json_str) = serde_json::to_string(&data) {
+                                                    if let Ok(json_str) = serde_json::to_string(&_data) {
                                                         let _ = storage.set_item("boat_emergency_data", &json_str);
                                                     }
                                                 }
@@ -166,6 +183,35 @@ pub fn BoatEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
                                         );
                                     }
                                 >
+                                    <div class="mb-6">
+                                        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                                            <p class="text-sm font-medium text-gray-700 mb-2">
+                                                "GPS Status"
+                                            </p>
+                                            <Show
+                                                when=move || location_acquired.get()
+                                                fallback=move || {
+                                                    view! {
+                                                        <p class="text-sm text-orange-700">
+                                                            {move || {
+                                                                let msg = location_error.get();
+                                                                if msg.is_empty() {
+                                                                    "🔍 Acquiring GPS signal...".to_string()
+                                                                } else {
+                                                                    msg
+                                                                }
+                                                            }}
+                                                        </p>
+                                                    }
+                                                }
+                                            >
+                                                <p class="text-sm text-green-700 font-semibold">
+                                                    "✓ GPS Signal Acquired"
+                                                </p>
+                                            </Show>
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <label
                                             for="captain_name"

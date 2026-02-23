@@ -23,7 +23,7 @@ pub struct WheelchairEmergencyData {
 pub fn WheelchairEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
     let navigate = use_navigate();
     let geolocation = use_geolocation();
-    let (presets, set_presets) = signal(get_wheelchair_presets());
+    let (presets, _set_presets) = signal(get_wheelchair_presets());
 
     let use_preset_mode = RwSignal::new(true);
 
@@ -34,6 +34,26 @@ pub fn WheelchairEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
     let description = RwSignal::new(String::new());
     let medical_info = RwSignal::new(String::new());
     let location = RwSignal::new(String::new());
+
+    // Geolocation status
+    let location_acquired = RwSignal::new(false);
+    let location_error = RwSignal::new(String::new());
+
+    // Initialize geolocation data on component load
+    {
+        let coords = geolocation.coords;
+        Effect::new(move || {
+            if let Some(coord) = coords.get() {
+                let lat = coord.latitude();
+                let lon = coord.longitude();
+                location.set(format!("{:.4}, {:.4}", lat, lon));
+                location_acquired.set(true);
+                location_error.set(String::new());
+            } else {
+                location_error.set("🔍 Acquiring GPS signal...".to_string());
+            }
+        });
+    }
 
     let apply_preset = move |preset: WheelchairEmergencyPreset| {
         user_name.set(preset.user_name);
@@ -361,7 +381,7 @@ pub fn WheelchairEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
                                             .get()
                                             .map(|c| (Some(c.latitude()), Some(c.longitude())))
                                             .unwrap_or((None, None));
-                                        let data = WheelchairEmergencyData {
+                                        let _data = WheelchairEmergencyData {
                                             user_name: user_name.get(),
                                             phone: phone.get(),
                                             wheelchair_model: wheelchair_model.get(),
@@ -376,7 +396,7 @@ pub fn WheelchairEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
                                         {
                                             if let Some(window) = web_sys::window() {
                                                 if let Ok(Some(storage)) = window.local_storage() {
-                                                    if let Ok(json_str) = serde_json::to_string(&data) {
+                                                    if let Ok(json_str) = serde_json::to_string(&_data) {
                                                         let _ = storage
                                                             .set_item("wheelchair_emergency_data", &json_str);
                                                     }
@@ -432,6 +452,34 @@ pub fn WheelchairEmergencyPage(language: RwSignal<Language>) -> impl IntoView {
                                         >
                                             "Current Location"
                                         </label>
+                                        <div class="mb-4">
+                                            <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded">
+                                                <p class="text-sm font-medium text-gray-700 mb-2">
+                                                    "GPS Status"
+                                                </p>
+                                                <Show
+                                                    when=move || location_acquired.get()
+                                                    fallback=move || {
+                                                        view! {
+                                                            <p class="text-sm text-orange-700">
+                                                                {move || {
+                                                                    let msg = location_error.get();
+                                                                    if msg.is_empty() {
+                                                                        "🔍 Acquiring GPS signal...".to_string()
+                                                                    } else {
+                                                                        msg
+                                                                    }
+                                                                }}
+                                                            </p>
+                                                        }
+                                                    }
+                                                >
+                                                    <p class="text-sm text-green-700 font-semibold">
+                                                        "✓ GPS Signal Acquired"
+                                                    </p>
+                                                </Show>
+                                            </div>
+                                        </div>
                                         <input
                                             id="location"
                                             type="text"

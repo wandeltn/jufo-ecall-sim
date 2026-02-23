@@ -80,7 +80,7 @@ pub fn EcallSimulatorPage(language: RwSignal<Language>) -> impl IntoView {
     // Initialize geolocation data on component load
     {
         let coords = geolocation.coords;
-        Memo::new(move |_| {
+        Effect::new(move || {
             if let Some(coord) = coords.get() {
                 let lat = coord.latitude();
                 let lon = coord.longitude();
@@ -92,13 +92,13 @@ pub fn EcallSimulatorPage(language: RwSignal<Language>) -> impl IntoView {
 
                 // Update driving direction based on heading
                 let direction = match heading {
-                    h if h >= 337.5 || h < 22.5 => "North",
-                    h if h >= 22.5 && h < 67.5 => "Northeast",
-                    h if h >= 67.5 && h < 112.5 => "East",
-                    h if h >= 112.5 && h < 157.5 => "Southeast",
-                    h if h >= 157.5 && h < 202.5 => "South",
-                    h if h >= 202.5 && h < 247.5 => "Southwest",
-                    h if h >= 247.5 && h < 292.5 => "West",
+                    h if (h >= 337.5) || (h < 22.5) => "North",
+                    h if (h >= 22.5) && (h < 67.5) => "Northeast",
+                    h if (h >= 67.5) && (h < 112.5) => "East",
+                    h if (h >= 112.5) && (h < 157.5) => "Southeast",
+                    h if (h >= 157.5) && (h < 202.5) => "South",
+                    h if (h >= 202.5) && (h < 247.5) => "Southwest",
+                    h if (h >= 247.5) && (h < 292.5) => "West",
                     _ => "Northwest",
                 };
                 driving_direction.set(direction.to_string());
@@ -118,7 +118,7 @@ pub fn EcallSimulatorPage(language: RwSignal<Language>) -> impl IntoView {
                 location_acquired.set(true);
                 location_error.set(String::new());
             } else {
-                location_error.set("Waiting for GPS signal...".to_string());
+                location_error.set("🔍 Acquiring GPS signal...".to_string());
             }
         });
     }
