@@ -1,4 +1,5 @@
 use crate::app::components::navbar::NavbarComponent;
+use crate::app::pages::i18n::Language;
 use leptos::prelude::*;
 use leptos_captcha::Captcha;
 use leptos_meta::{provide_meta_context, Stylesheet, Title};
@@ -17,8 +18,13 @@ pub mod components;
 pub mod pages;
 
 use crate::app::pages::{
-    about_page::AboutPage, create_event_page::CreateEventPage, find_event_page::FindEventPage,
-    home_page::HomePage,
+    about_page::AboutPage, boat_emergency_details_page::BoatEmergencyDetailsPage,
+    boat_emergency_page::BoatEmergencyPage, create_event_page::CreateEventPage,
+    ecall_details_page::EcallDetailsPage, ecall_simulator_page::EcallSimulatorPage,
+    find_event_page::FindEventPage, landing_page::LandingPage,
+    lift_emergency_details_page::LiftEmergencyDetailsPage, lift_emergency_page::LiftEmergencyPage,
+    simulators_page::SimulatorsPage, wheelchair_emergency_details_page::WheelchairEmergencyDetailsPage,
+    wheelchair_emergency_page::WheelchairEmergencyPage,
 };
 
 #[component]
@@ -41,6 +47,7 @@ pub fn App() -> impl IntoView {
         },
     );
     let is_pending = RwSignal::new(Option::None);
+    let language = RwSignal::new(Language::English);
 
     view! {
         // injects a stylesheet into the document <head>
@@ -55,12 +62,39 @@ pub fn App() -> impl IntoView {
         <ConfigProvider theme>
             <Router>
                 <main>
-                    <NavbarComponent theme=theme />
+                    <NavbarComponent theme=theme language=language />
                     <Routes fallback=move || "Not found.">
-                        <Route path=path!("") view=HomePage />
+                        <Route path=path!("") view=move || view! { <LandingPage language /> } />
+                        <Route
+                            path=path!("simulators")
+                            view=move || view! { <SimulatorsPage language /> }
+                        />
+                        <Route
+                            path=path!("ecall")
+                            view=move || view! { <EcallSimulatorPage language /> }
+                        />
                         <Route path=StaticSegment("find") view=FindEventPage />
                         <Route path=path!("create") view=CreateEventPage />
-                        <Route path=path!("about") view=AboutPage />
+                        <Route path=path!("about") view=move || view! { <AboutPage language /> } />
+                        <Route path=path!("ecall-details") view=EcallDetailsPage />
+                        <Route
+                            path=path!("boat-emergency")
+                            view=move || view! { <BoatEmergencyPage language /> }
+                        />
+                        <Route path=path!("boat-emergency-details") view=BoatEmergencyDetailsPage />
+                        <Route
+                            path=path!("wheelchair-emergency")
+                            view=move || view! { <WheelchairEmergencyPage language /> }
+                        />
+                        <Route
+                            path=path!("wheelchair-emergency-details")
+                            view=WheelchairEmergencyDetailsPage
+                        />
+                        <Route
+                            path=path!("lift-emergency")
+                            view=move || view! { <LiftEmergencyPage language /> }
+                        />
+                        <Route path=path!("lift-emergency-details") view=LiftEmergencyDetailsPage />
                         <Route path=WildcardSegment("any") view=NotFound />
                     </Routes>
 

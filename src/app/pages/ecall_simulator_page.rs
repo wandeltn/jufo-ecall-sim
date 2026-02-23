@@ -1,3 +1,4 @@
+use crate::app::pages::i18n::{Language, Translations};
 use crate::app::pages::presets::{get_ecall_presets, EcallEmergencyPreset};
 use leptos::prelude::*;
 use leptos::{view, IntoView};
@@ -47,7 +48,7 @@ fn estimate_previous_position(
 }
 
 #[component]
-pub fn HomePage() -> impl IntoView {
+pub fn EcallSimulatorPage(language: RwSignal<Language>) -> impl IntoView {
     let navigate = use_navigate();
     let geolocation = use_geolocation();
 
@@ -132,14 +133,16 @@ pub fn HomePage() -> impl IntoView {
         vehicle_phone.set(preset.vehicle_phone);
     };
 
+    let t = move |key: &str| Translations::new(language.get()).t(key);
+
     view! {
         <div class="min-h-screen bg-gradient-to-b from-red-50 to-white py-12 px-4">
             <div class="max-w-2xl mx-auto">
                 <div class="mb-12">
-                    <h1 class="text-4xl font-bold text-gray-900 mb-2">"Emergency Call System"</h1>
-                    <p class="text-lg text-gray-600">
-                        "Enter all details relevant for starting an emergency call"
-                    </p>
+                    <h1 class="text-4xl font-bold text-gray-900 mb-2">
+                        {move || t("ecall.title")}
+                    </h1>
+                    <p class="text-lg text-gray-600">{move || t("ecall.subtitle")}</p>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-lg p-8">
@@ -151,10 +154,10 @@ pub fn HomePage() -> impl IntoView {
                                 <div>
                                     <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
                                         <h2 class="text-2xl font-bold text-gray-800 mb-2">
-                                            "Quick Emergency Selection"
+                                            {move || t("simulator.quick_selection")}
                                         </h2>
                                         <p class="text-gray-700">
-                                            "Choose a preset scenario that matches your situation. This is the fastest way to get help."
+                                            {move || t("simulator.quick_selection_desc")}
                                         </p>
                                     </div>
 
@@ -185,14 +188,14 @@ pub fn HomePage() -> impl IntoView {
 
                                     <div class="border-t-2 border-gray-200 pt-6">
                                         <p class="text-sm text-gray-500 mb-3">
-                                            "Need more control over the details?"
+                                            {move || t("simulator.need_control")}
                                         </p>
                                         <button
                                             type="button"
                                             on:click=move |_| use_preset_mode.set(false)
                                             class="w-full bg-white hover:bg-gray-100 text-gray-700 border-2 border-gray-300 font-semibold py-3 px-4 rounded-lg transition duration-200"
                                         >
-                                            "✎ Enter Information Manually"
+                                            {move || t("simulator.manual_entry")}
                                         </button>
                                     </div>
                                 </div>
@@ -209,7 +212,7 @@ pub fn HomePage() -> impl IntoView {
                                         on:click=move |_| use_preset_mode.set(true)
                                         class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg transition duration-200 mb-6"
                                     >
-                                        "← Back to Presets"
+                                        {move || t("simulator.back_presets")}
                                     </button>
                                 </div>
 

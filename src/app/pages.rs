@@ -1,4 +1,16 @@
 pub mod about_page;
+pub mod boat_emergency_details_page;
+pub mod boat_emergency_page;
 pub mod create_event_page;
+pub mod ecall_details_page;
+pub mod ecall_simulator_page;
 pub mod find_event_page;
 pub mod home_page;
+pub mod i18n;
+pub mod landing_page;
+pub mod lift_emergency_details_page;
+pub mod lift_emergency_page;
+pub mod presets;
+pub mod simulators_page;
+pub mod wheelchair_emergency_details_page;
+pub mod wheelchair_emergency_page;

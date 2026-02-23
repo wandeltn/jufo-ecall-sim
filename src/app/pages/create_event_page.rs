@@ -8,8 +8,7 @@ use leptos::{view, IntoView};
 use phosphor_leptos::{Icon, IconWeight, CALENDAR_DOT, COINS, IMAGE, MAP_PIN, TICKET};
 use thaw::{
     Button, ButtonAppearance, Card, DatePicker, FileList, Input, Label, LabelSize, MessageBar,
-    MessageBarBody, MessageBarIntent, Select, SpinButton, Textarea, TimePicker, Toast, ToastBody,
-    ToasterInjection, Upload, UploadDragger,
+    MessageBarBody, MessageBarIntent, Select, SpinButton, Textarea, TimePicker, Upload, UploadDragger,
 };
 
 #[component]
