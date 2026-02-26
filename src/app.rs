@@ -47,7 +47,7 @@ pub fn App() -> impl IntoView {
         },
     );
     let is_pending = RwSignal::new(Option::None);
-    let language = RwSignal::new(Language::English);
+    let language = RwSignal::new(Language::German);
 
     view! {
         // injects a stylesheet into the document <head>
