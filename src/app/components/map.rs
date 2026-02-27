@@ -79,7 +79,11 @@ fn initialize_map(element_id: &str, latitude: f64, longitude: f64, location_name
         let args = js_sys::Array::new();
         args.push(&lat_lng);
         args.push(&JsValue::from_f64(13.0));
-        let _ = js_sys::Reflect::apply(&set_view_fn.unchecked_into(), &map, &args);
+        let _ = js_sys::Reflect::apply(
+            &set_view_fn.unchecked_into::<js_sys::Function>(),
+            &map,
+            &args,
+        );
     }
 
     // Create tile layer options with attribution
@@ -102,7 +106,11 @@ fn initialize_map(element_id: &str, latitude: f64, longitude: f64, location_name
     if let Some(add_to_fn) = add_to_fn {
         let args = js_sys::Array::new();
         args.push(&map);
-        let _ = js_sys::Reflect::apply(&add_to_fn.unchecked_into(), &tile_layer, &args);
+        let _ = js_sys::Reflect::apply(
+            &add_to_fn.unchecked_into::<js_sys::Function>(),
+            &tile_layer,
+            &args,
+        );
     }
 
     // Add a marker at the location
@@ -114,7 +122,11 @@ fn initialize_map(element_id: &str, latitude: f64, longitude: f64, location_name
     if let Some(bind_popup_fn) = bind_popup_fn {
         let args = js_sys::Array::new();
         args.push(&JsValue::from_str(&popup_text));
-        let _ = js_sys::Reflect::apply(&bind_popup_fn.unchecked_into(), &marker_obj, &args);
+        let _ = js_sys::Reflect::apply(
+            &bind_popup_fn.unchecked_into::<js_sys::Function>(),
+            &marker_obj,
+            &args,
+        );
     }
 
     // Call addTo on marker
@@ -122,7 +134,11 @@ fn initialize_map(element_id: &str, latitude: f64, longitude: f64, location_name
     if let Some(add_to_fn) = add_to_fn {
         let args = js_sys::Array::new();
         args.push(&map);
-        let _ = js_sys::Reflect::apply(&add_to_fn.unchecked_into(), &marker_obj, &args);
+        let _ = js_sys::Reflect::apply(
+            &add_to_fn.unchecked_into::<js_sys::Function>(),
+            &marker_obj,
+            &args,
+        );
     }
 }
 
